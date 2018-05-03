@@ -1,0 +1,493 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/ocf.css" />
+    <link rel="stylesheet" type="text/css" href="../css/theme-pink.css" />
+    <link rel="stylesheet" type="text/css" href="../css/animate.min.css" />
+    <style>
+        card{
+            display:block;
+            box-shadow: 0 1px 6px rgba(0,0,0,.117647), 0 1px 4px rgba(0,0,0,.117647);
+            padding:0.75rem;
+        }
+        .aui-radio:checked, .aui-radio.aui-checked, .aui-checkbox:checked, .aui-checkbox.aui-checked {
+            background-color: #e91e63;
+            border: solid 1px #e91e63;
+            text-align: center;
+            background-clip: padding-box;
+        }
+        card > content{
+            padding-top:0.75rem;
+            display: block;
+        }
+        card > footer {
+            margin-top: 0.75rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .inf-block {
+            display:block;
+        }
+        card > footer > .inf-btn {
+            margin-right: 0.25rem;
+            background: transparent;
+        }
+        card > footer > .inf-btn:last-of-type {
+            margin-right: 0;
+            color:#e91e63;
+        }
+        card > header{
+            color: #e91e63;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+        card > content > subtitle{
+            font-size: 0.8rem;
+            font-weight: 400;
+            padding-bottom:0.75rem;
+            display:block;
+        }
+        .inf-input-container {
+            position: relative;
+            margin-top: 1.3rem;
+            margin-bottom:1.5rem;
+        }
+        .inf-input-container > input {
+            border-bottom: 1px solid #757575!important;
+            line-height: 2;
+            height: auto;
+            transition: .2s ease-out .0s;
+
+        }
+        .inf-input-container > inputholder {
+            position: absolute;
+            top: 0;
+            line-height: 1;
+            transform-origin: 0% 100%;
+            text-align: initial;
+            transform: translateY(0.4rem);
+            font-size: 0.8rem;
+            opacity: 0.65;
+            transition: .2s ease-out .0s;
+            pointer-events: none;
+        }
+        .inf-input-container > input:focus{
+            border-bottom:1px solid #e91e63!important;
+        }
+        .inf-input-container > .inf-active{
+            transform: translateY(-0.7rem) scale(0.8);
+            transform-origin: 0 0;
+            opacity:1;
+        }
+        .inf-input-container > .inf-active-color{
+            color: #e91e63;
+        }
+        .inf-text-center{
+            text-align:center;
+        }
+        #bind_form > footer > .inf-btn{
+            color:#fff!important;
+        }
+        #binded{
+            height:calc(100vh - 1.5rem);
+        }
+        blockquote{
+            color:#fff;
+        }
+        #qrcode > img{
+            margin:0 auto;
+        }
+        hr{
+            height:1px;
+            background:#757575;
+            width:100%;
+            transform: scaleY(0.25); /*Draw an Ulter-thin line that 可以和原生的分割线肩并肩（英文太差注释写不下去了）*/
+            margin-top:0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <hr class="ocf-app-line">
+    <div id="loading" class="ocf-fixed-full aui-bg-white"></div>
+    <div class="pull-to-refresh-material__control">
+        <svg class="pull-to-refresh-material__icon" fill="#e91e63" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
+            <path d="M0 0h24v24H0z" fill="none" />
+        </svg>
+
+        <svg class="pull-to-refresh-material__spinner" width="24" height="24" viewBox="25 25 50 50">
+            <circle class="pull-to-refresh-material__path" cx="50" cy="50" r="20" fill="none" stroke-width="4" stroke-miterlimit="10" />
+        </svg>
+    </div>
+    <section class="aui-content-padded">
+        <card id="update_form" style="display:none;">
+            <header>请更新您的信息</header>
+            <content class="aui-list-item-inner">
+                <subtitle>选择您的性别</subtitle>
+                <label><input class="aui-radio" type="radio" name="gender" value="1" checked> 男</label>
+                <label><input class="aui-radio" type="radio" name="gender" value="2"> 女</label>
+            </content>
+            <content>
+                <div class="inf-input-container">
+                    <input id="real_name" type="text" onfocus="$ocf.inputFocus(this);" onblur="$ocf.inputBlur(this);">
+                    <inputholder>您的姓名</inputholder>
+                </div>
+            </content>
+            <footer>
+                <div class="aui-btn inf-btn" onclick="actionUpdateData();">确定</div>
+            </footer>
+        </card>
+        <card id="bind_form" style="display:none;">
+            <header class="inf-text-center">绑定你的另一半</header>
+            <content>
+                <div id="qrcode"></div>
+            </content>
+            <content>
+                <h1 class="inf-text-center" id="real_name_span"></h1>
+                <p class="inf-text-center">我的Infini码</p>
+                <p class="inf-text-center">此码将于<span id="time"></span>失效</p>
+            </content>
+            <content>
+                <p class="inf-text-center">右上方扫描<span id="ta"></span>的二维码</p>
+            </content>
+            <hr>
+            <footer class="inf-block">
+                <p class="inf-text-center" onclick="dogeButton();"><small><i class="aui-iconfont icon-heart"></i> 还没有<span id="sex"></span>朋友？点击这里</small></p>
+            </footer>
+        </card>
+        <card id="binded" style="display:none;">
+            <header class="inf-text-center">已绑定</header>
+            <content>
+                <blockquote id="binded_comment">
+                    <p>好基友，一辈子。</p>
+                    <p style="text-align:right;">——鲁迅？</p>
+                </blockquote>
+            </content>
+            <footer>
+                <p class="inf-text-center" onclick="unbind();">解除绑定是不可能的，这辈子都不可能的</p>
+            </footer>
+        </card>
+    </section>
+</body>
+<script type="text/javascript" src="../script/ocf.js"></script>
+<script type="text/javascript" src="../script/jquery.min.js"></script>
+<script type="text/javascript" src="../script/pulltorefresh.js"></script>
+<script type="text/javascript" src="../script/pulltorefresh.animated.js"></script>
+<script type="text/javascript" src="../script/sha1.js"></script>
+<script type="text/javascript" src="../script/md5.js"></script>
+<script type="text/javascript" src="../script/qrcode.min.js"></script>
+<script type="text/javascript">
+    var charTa="它";
+    var charSex="";
+    var qrcode = new QRCode($ocf.byId("qrcode"), {
+        colorDark : '#757575',
+        colorLight : 'transparent'
+    });
+
+    apiready = function() {
+        init();
+    };
+
+    function init(){
+        var gender=api.getPrefs({sync: true,key: 'gender'});
+        var real_name=api.getPrefs({sync: true,key: 'real_name'});
+        var uid=api.getPrefs({sync: true,key: 'uid'});
+        var OPENID=api.getPrefs({sync: true,key: 'OPENID'});
+        if(gender==0 || !real_name){
+            $ocf.css($ocf.byId("update_form"),'display:block;');
+        }else{
+            if(gender==1) {
+                charTa="她";
+                charSex="女";
+            }
+            else {
+                charTa="他";
+                charSex="男";
+            }
+            $ocf.html($ocf.byId("sex"),charSex);
+            $ocf.html($ocf.byId("ta"),charTa);
+            var bind_uid=api.getPrefs({sync: true,key: 'bind_uid'});
+            if(bind_uid>0){
+                $ocf.css($ocf.byId("binded"),'display:block;');
+                getFriendInfo();
+            }else{
+                $ocf.css($ocf.byId("bind_form"),'display:block;');
+                if($ocf.getByteLen(real_name)<=16) $ocf.html($ocf.byId("real_name_span"),real_name); else $ocf.html($ocf.byId("real_name_span"),"名字太长不显示了");
+                GeneCode();
+                //Add to the length of the original text of the bar code to make it more professional and SMART just like Trump's hair
+                //infini protocol's a joke and do nothing at all, never mind
+            }
+        }
+        $ocf.loaded();
+    }
+
+    function GeneCode(){
+        var uid=api.getPrefs({sync: true,key: 'uid'});
+        var d = new Date();
+        var hr=d.getHours();
+        var mn=d.getMinutes()+1;
+        var minStamp=parseInt(Math.round(new Date().getTime()/1000)/60).toString();
+        //var timestamp=Math.round(new Date().getTime()/1000).toString();
+        qrcode.makeCode("infini://"+hex_md5(minStamp+"0"+uid)+"|"+uid);
+        $ocf.html($ocf.byId("time"),hr+":"+mn);
+        api.toast({
+            msg: '刷新成功！',
+            duration: 2000,
+            global:true
+        });
+        /*
+        api.ajax({
+            url:'https://infini.1cf.co/api/GetBindCode',
+            method: 'post',
+            data:
+            {
+                values:
+                {
+                    OPENID: api.getPrefs({sync: true,key: 'OPENID'}),
+                    minStamp: minStamp,
+                    TIMESTAMP:timestamp,
+                    SECURE_VALUE:hex_sha1(hex_md5(timestamp)+"rand2333")
+                }
+            }
+        },function(ret,err){
+            if(ret)
+            {
+                console.log(JSON.stringify(ret));
+                if(ret.ret!=200){
+                    api.toast({
+                        msg: '服务器异常',
+                        duration: 2000,
+                        global:true
+                    });
+                }else{
+                    qrcode.makeCode(ret.data.code);
+                    $ocf.html($ocf.byId("time"),hr+":"+mn);
+                    api.toast({
+                        msg: '刷新成功！',
+                        duration: 2000,
+                        global:true
+                    });
+                }
+            }
+            else
+            {
+                api.toast({
+                    msg: '连接数据库失败，请检查网络连接！',
+                    duration: 2000,
+                    location: 'top'
+                });
+            }
+        });
+        */
+
+    }
+
+    function refresh(){
+        var bind_uid=api.getPrefs({sync: true,key: 'bind_uid'});
+        if(!bind_uid){
+            GeneCode();
+        }
+    }
+
+    function actionUpdateData(){
+        var gender=$("input[name='gender'][checked]").val();
+        if(!$ocf.val($ocf.byId("real_name"))) {
+            api.toast({msg: '请填写姓名！',duration: 2000,global:true});
+            return;
+        }
+        var timestamp=Math.round(new Date().getTime()/1000).toString();
+        api.ajax({
+            url:'https://infini.1cf.co/api/AccountUpdate',
+            method: 'post',
+            data:
+            {
+                values:
+                {
+                    OPENID: api.getPrefs({sync: true,key: 'OPENID'}),
+                    gender: gender,
+                    real_name:$ocf.val($ocf.byId("real_name")),
+                    TIMESTAMP:timestamp,
+                    SECURE_VALUE:hex_sha1(hex_md5(timestamp)+"rand2333")
+                }
+            }
+        },function(ret,err){
+            if(ret)
+            {
+                console.log(JSON.stringify(ret));
+                if(ret.ret!=200){
+                    api.toast({
+                        msg: '服务器异常',
+                        duration: 2000,
+                        global:true
+                    });
+                }else{
+                    api.setPrefs({key: 'real_name',value: $("input[name='radioName'][checked]").val() });
+                    api.setPrefs({key: 'gender',value: $ocf.val($ocf.byId("real_name")) });
+                    api.toast({
+                        msg: '更新成功！',
+                        duration: 2000,
+                        global:true
+                    });
+                    $ocf.css($ocf.byId("update_form"),'display:none;');
+                }
+
+            }
+            else
+            {
+                api.toast({
+                    msg: '连接数据库失败，请检查网络连接！',
+                    duration: 2000,
+                    location: 'top'
+                });
+            }
+        });
+    }
+
+    function getFriendInfo(){
+        var bind_id=api.getPrefs({sync: true,key: 'bind_id'});
+        if(!bind_id) {
+            api.toast({msg: '非法操作！',duration: 2000,global:true});
+            return;
+        }
+        var timestamp=Math.round(new Date().getTime()/1000).toString();
+        api.ajax({
+            url:'https://infini.1cf.co/api/GetFriendInfo',
+            method: 'post',
+            data:
+            {
+                values:
+                {
+                    bind_id: bind_id,
+                    TIMESTAMP:timestamp,
+                    SECURE_VALUE:hex_sha1(hex_md5(timestamp)+"rand2333")
+                }
+            }
+        },function(ret,err){
+            if(ret)
+            {
+                console.log(JSON.stringify(ret));
+                if(ret.ret!=200){
+                    api.toast({
+                        msg: '服务器异常',
+                        duration: 2000,
+                        global:true
+                    });
+                }else{
+                    api.setPrefs({key: 'binded_uid',value: ret.data.uid });
+                    api.setPrefs({key: 'binded_email',value: ret.data.email });
+                    api.setPrefs({key: 'binded_name',value: ret.data.name });
+                    api.setPrefs({key: 'binded_OPENID',value: ret.data.OPENID });
+                    api.setPrefs({key: 'binded_real_name',value: ret.data.real_name });
+                    api.setPrefs({key: 'binded_gender',value: ret.data.gender });
+                }
+
+            }
+            else
+            {
+                api.toast({
+                    msg: '连接数据库失败，请检查网络连接！',
+                    duration: 2000,
+                    location: 'top'
+                });
+            }
+        });
+    }
+
+    function unbind(){
+        console.warn("-1s");
+    }
+
+    function dogeButton(){
+        api.confirm({
+            title: 'Infini Doge模式',
+            msg: '实在找不到女朋友？看不上心仪的小哥哥？真的吗？',
+            buttons: ['嗯！', '不不不']
+        }, function(ret, err) {
+            var index = ret.buttonIndex;
+            if(index==1){
+                //init doge mode
+                bind(2);
+            }
+        });
+    }
+
+    function dogeMode(){
+        var timestamp=Math.round(new Date().getTime()/1000).toString();
+        api.ajax({
+            url:'https://infini.1cf.co/api/AccountDogeMode',
+            method: 'post',
+            data:
+            {
+                values:
+                {
+                    OPENID: api.getPrefs({sync: true,key: 'OPENID'}),
+                    uid:uid,
+                    TIMESTAMP:timestamp,
+                    SECURE_VALUE:hex_sha1(hex_md5(timestamp)+"rand2333")
+                }
+            }
+        },function(ret,err){
+            if(ret)
+            {
+                console.log(JSON.stringify(ret));
+                if(ret.ret!=200){
+                    api.toast({
+                        msg: '服务器异常',
+                        duration: 2000,
+                        global:true
+                    });
+                }else{
+                    if(uid==2){
+                        api.toast({
+                            msg: 'Doge模式，启动！',
+                            duration: 2000,
+                            global:true
+                        });
+                        api.setPrefs({key: 'doge',value: 1 });
+                        api.closeWidget({
+                            id: 'A6943107131657',
+                            silent:true
+                        });
+                    }else{
+                        api.toast({
+                            msg: '绑定成功，即将重启APP！',
+                            duration: 2000,
+                            global:true
+                        });
+                        api.rebootApp(); //Limitless time made start over the simplest way
+                    }
+                }
+            }
+            else
+            {
+                api.toast({
+                    msg: '连接数据库失败，请检查网络连接！',
+                    duration: 2000,
+                    location: 'top'
+                });
+            }
+        });
+    }
+
+    pullToRefresh({
+        container: document.querySelector("body"),
+        animates: ptrAnimatesMaterial,
+        refresh() {
+            $ocf.loading();
+            init();
+            return new Promise(resolve => {
+                setTimeout(resolve, 500)
+            })
+        }
+    });
+</script>
+
+</html>

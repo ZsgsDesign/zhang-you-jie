@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>Hello APP</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/ocf.css" />
+    <link rel="stylesheet" type="text/css" href="../css/theme-pink.css" />
+    <link rel="stylesheet" type="text/css" href="../css/animate.min.css" />
+    <link rel="stylesheet" href="../css/quill.bubble.css" />
+    <style>
+    .inf-input-container {
+        position: relative;
+        margin-top: 1.3rem;
+        margin-bottom:1.5rem;
+    }
+    .inf-input-container > input {
+        border-bottom: 1px solid #757575!important;
+        line-height: 2;
+        height: auto;
+        transition: .2s ease-out .0s;
+
+    }
+    .inf-input-container > inputholder {
+        position: absolute;
+        top: 0;
+        line-height: 1;
+        transform-origin: 0% 100%;
+        text-align: initial;
+        transform: translateY(0.4rem);
+        font-size: 0.8rem;
+        opacity: 0.65;
+        transition: .2s ease-out .0s;
+        pointer-events: none;
+    }
+    .inf-input-container > input:focus{
+        border-bottom:1px solid #e91e63!important;
+    }
+    .inf-input-container > .inf-active{
+        transform: translateY(-0.7rem) scale(0.8);
+        transform-origin: 0 0;
+        opacity:1;
+    }
+    .inf-input-container > .inf-active-color{
+        color: #e91e63;
+    }
+    #bubble-container {
+        height: calc(100vh - 6.15rem);
+        border-radius：2px;
+        font-size: 0.9rem;
+        background: #fff;
+    }
+    p{
+        font-size: 0.9rem;
+    }
+    h3{
+        font-size: 1rem;
+    }
+    h2{
+        font-size: 1.1rem;
+    }
+    h1{
+        font-size: 1.2rem;
+    }
+    .aui-content-padded{
+        margin:1.5rem;
+    }
+    </style>
+</head>
+<body>
+    <hr class="ocf-app-line">
+    <div id="loading" class="ocf-fixed-full aui-bg-white"></div>
+    <section class="aui-content-padded">
+        <div class="inf-input-container">
+            <input id="title" type="text" onfocus="$ocf.inputFocus(this);" onblur="$ocf.inputBlur(this);">
+            <inputholder>日记标题</inputholder>
+        </div>
+        <div id="bubble-container" class="ocf-panel-shadow"></div>
+    </section>
+</body>
+<script type="text/javascript" src="../script/ocf.js"></script>
+<script type="text/javascript" src="../script/pulltorefresh.js"></script>
+<script type="text/javascript" src="../script/pulltorefresh.animated.js"></script>
+<script type="text/javascript" src="../script/quill.min.js"></script>
+<script type="text/javascript">
+    var page=0;
+
+    apiready = function() {
+        init();
+    };
+
+    function actionSubmit(){
+        var content=$ocf.html($ocf.byId("bubble-container"));
+        var title=$ocf.val($ocf.byId("title"));
+        if(!title) title="无标题日记";
+        //来不及写了，明天交吧
+    }
+
+    function init(){
+        var gender=api.getPrefs({sync: true,key: 'gender'});
+        if(gender==1) gender="女"; else if(gender==2) gender="男";
+        var quill = new Quill('#bubble-container', {
+          placeholder: '在这里写下你和'+gender+'的相处时光吧',
+          theme: 'bubble'
+        });
+        $ocf.loaded();
+    }
+
+</script>
+
+</html>
