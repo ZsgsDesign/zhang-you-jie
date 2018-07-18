@@ -1,3 +1,6 @@
-Ã»ÓĞĞ´Íê£¬Ò²Ã»ÓĞ°ì·¨½éÉÜ¹¦ÄÜ¡£
-Ò»¸öÊÇAndroid Studio¹¤³Ì£¬
-Ò»¸öÊÇºó¶Ë¡£
+æ²¡æœ‰å†™å®Œï¼Œä¹Ÿæ²¡æœ‰åŠæ³•ä»‹ç»åŠŸèƒ½ã€‚
+ä¸€ä¸ªæ˜¯Android Studioå·¥ç¨‹ï¼Œ
+ä¸€ä¸ªæ˜¯åç«¯ã€‚
+
+[å‰ç«¯](https://github.com/ZsgsDesign/Infini_FrontEnd)
+[åç«¯](https://github.com/ZsgsDesign/Infini_BackEnd)
